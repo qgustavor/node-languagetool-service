@@ -9,6 +9,7 @@ deploy:
   provider: releases
   api_key:
     secure: NfHD28wzLkVoduGpY9ev/4IGbfd+x6QfgJMyxHJTo15jN/l5nI7g1ShM/1x6b+0nl0SizbF3Cv71BAtTSWbibEIAKUwNTr7/IdtsiJsgkv9iQAWF6BQiheP434DfmcRLENdhnscd1Repp1ocXCztJ674dC658YT3/5ZHaOuP7+RSl9b58lTm0AUUlLYVqHYncSSP7Bo3qkop3DdQGilIOnFiSpqoly6NFLgcnvs2w2IWTpR9i4dVIYdP6EZ7MPkr+sBZvJxhXDtODJrUSgKj6pJgAAjUdu487HD9K1pWIG7zZ7YWUV88ei/yfeYW9XEar+7h48m1uODw2U2wipOmO5cyDEQ1kORSooISrW5QpmE78dz9uS0RirEtoGWyXTXECwratyBO6YSv0JXrEngOyyftCCGcpz2gasJbx1dKg1FwfiRJOwz6vPRxoomr9OGi04/tuKDoXlJTRuEP8Gngy43F6CIduD1vAZl6nhdtfiXoRKh2HUlHc125G6QCkHZET9r8jhOdyZvwEmf7LNdGiEZkN3kX4+E0VNYQz9y6w0rwmH3+rOA/c1caNrqH34mC7vxIy0NDPR0EIvJpqyhLk+lY+15R+GPyX/21BgOsb46KQFwxfXhKcD9g21o+ScMYheW33NSQIGpkjbW3x6+owjaGrr+WN+zi4vwXMKLv0eg=
+  skip_cleanup: true
   file: lt.tar.gz
   on:
     repo: schreiben/node-languagetool-service
