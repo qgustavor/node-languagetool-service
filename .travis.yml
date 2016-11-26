@@ -1,0 +1,8 @@
+language: java
+before_build:
+  - wget https://languagetool.org/download/LanguageTool-stable.zip
+  - unzip LanguageTool-stable.zip
+  - mv LanguageTool-*/ lt
+install:
+  - ant compile
+  - tar -zcvf lt.tar.gz lt
