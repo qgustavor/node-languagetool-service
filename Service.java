@@ -97,7 +97,7 @@ public class Service {
     String errorResponse = codeResponse(500);
     String okResponse = codeResponse(200);
 
-    Scanner sc = new Scanner(System.in);
+    Scanner sc = new Scanner(System.in, "UTF-8");
     while(sc.hasNextLine()) {
       try {
         String line = sc.nextLine();
