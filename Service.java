@@ -43,6 +43,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.StringWriter;
 
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
 public class Service {
 
   private static final JsonFactory factory = new JsonFactory();
@@ -65,8 +68,9 @@ public class Service {
     return sw.toString();
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws UnsupportedEncodingException {
 
+    PrintStream out = new PrintStream(System.out, true, "UTF-8");
     StringWriter sw = new StringWriter();
     try {
       JsonGenerator g = factory.createGenerator(sw);
@@ -126,7 +130,7 @@ public class Service {
             g.writeArrayFieldStart("matches");
             for (RuleMatch match :
               new JLanguageTool(
-                Languages.getLanguageForShortName(language)
+                Languages.getLanguageForShortCode(language)
               ).check(text)
             ) {
               g.writeStartObject();
@@ -193,17 +197,17 @@ public class Service {
             g.writeEndArray();
           g.writeEndObject();
           g.flush();
-          System.out.println(sw.toString());
+          out.println(sw.toString());
         } else if ("languages".equals(cmd)) {
-          System.out.println(languagesResponse);
+          out.println(languagesResponse);
         } else if ("quit".equals(cmd)) {
-          System.out.println(okResponse);
+          out.println(okResponse);
           return;
         } else {
-          System.out.println(errorResponse);
+          out.println(errorResponse);
         }
       } catch (Exception e) {
-        System.out.println(errorResponse);
+        out.println(errorResponse);
       }
     }
   }
