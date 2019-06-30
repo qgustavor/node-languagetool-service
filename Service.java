@@ -25,6 +25,9 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.languagetool.AnalyzedSentence;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
@@ -41,6 +44,8 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 import java.io.StringWriter;
 
 import java.io.PrintStream;
@@ -105,6 +110,7 @@ public class Service {
         String cmd = "";
         String text = "";
         String language = "";
+        List<String> disabledRules = null;
         while (p.nextToken() != JsonToken.END_OBJECT) {
           String name = p.getCurrentName();
           if ("command".equals(name)) {
@@ -119,6 +125,18 @@ public class Service {
             p.nextToken();
             language = p.getText();
           }
+          if ("disabledRules".equals(name)) {
+            p.nextToken();
+            ObjectMapper objectMapper = new ObjectMapper();
+            ArrayNode node = objectMapper.readTree(p);
+            Iterator<JsonNode> iterator = node.elements();
+            disabledRules = new ArrayList<String>();
+            for (int i = 0; i < node.size(); i++) {
+              if (iterator.hasNext()) {
+                disabledRules.add(iterator.next().asText());
+              }
+            }
+          }
         }
         p.close();
 
@@ -128,11 +146,13 @@ public class Service {
           g.writeStartObject();
             g.writeNumberField("code", 200);
             g.writeArrayFieldStart("matches");
-            for (RuleMatch match :
-              new JLanguageTool(
-                Languages.getLanguageForShortCode(language)
-              ).check(text)
-            ) {
+
+            JLanguageTool langTool = new JLanguageTool(
+              Languages.getLanguageForShortCode(language)
+            );
+            if (disabledRules != null) langTool.disableRules(disabledRules);
+
+            for (RuleMatch match : langTool.check(text)) {
               g.writeStartObject();
 
                 g.writeNumberField("offset", match.getFromPos());
